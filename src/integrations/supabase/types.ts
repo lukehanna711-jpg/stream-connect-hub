@@ -14,13 +14,280 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blocks: {
+        Row: {
+          blocked_id: string
+          created_at: string
+          reason: string | null
+          user_id: string
+        }
+        Insert: {
+          blocked_id: string
+          created_at?: string
+          reason?: string | null
+          user_id: string
+        }
+        Update: {
+          blocked_id?: string
+          created_at?: string
+          reason?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      direct_messages: {
+        Row: {
+          content: string | null
+          created_at: string
+          from_user: string
+          id: string
+          show_rec: Json | null
+          to_user: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          from_user: string
+          id?: string
+          show_rec?: Json | null
+          to_user: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          from_user?: string
+          id?: string
+          show_rec?: Json | null
+          to_user?: string
+        }
+        Relationships: []
+      }
+      friend_requests: {
+        Row: {
+          created_at: string
+          from_user: string
+          id: string
+          status: string
+          to_user: string
+        }
+        Insert: {
+          created_at?: string
+          from_user: string
+          id?: string
+          status?: string
+          to_user: string
+        }
+        Update: {
+          created_at?: string
+          from_user?: string
+          id?: string
+          status?: string
+          to_user?: string
+        }
+        Relationships: []
+      }
+      friendships: {
+        Row: {
+          created_at: string
+          friend_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      party_members: {
+        Row: {
+          invited_at: string
+          joined_at: string | null
+          party_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          invited_at?: string
+          joined_at?: string | null
+          party_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          invited_at?: string
+          joined_at?: string | null
+          party_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_members_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "watch_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      party_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_system: boolean
+          party_id: string
+          user_id: string | null
+          username: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_system?: boolean
+          party_id: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_system?: boolean
+          party_id?: string
+          user_id?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_messages_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "watch_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_color: string
+          created_at: string
+          email: string | null
+          favourite_show: string | null
+          id: string
+          is_subscribed: boolean
+          last_watched_private: boolean
+          last_watched_show: string | null
+          member_since: string
+          username: string
+        }
+        Insert: {
+          avatar_color?: string
+          created_at?: string
+          email?: string | null
+          favourite_show?: string | null
+          id: string
+          is_subscribed?: boolean
+          last_watched_private?: boolean
+          last_watched_show?: string | null
+          member_since?: string
+          username: string
+        }
+        Update: {
+          avatar_color?: string
+          created_at?: string
+          email?: string | null
+          favourite_show?: string | null
+          id?: string
+          is_subscribed?: boolean
+          last_watched_private?: boolean
+          last_watched_show?: string | null
+          member_since?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      watch_history: {
+        Row: {
+          episode: number
+          id: string
+          show_id: string
+          show_title: string
+          user_id: string
+          watched_at: string
+        }
+        Insert: {
+          episode: number
+          id?: string
+          show_id: string
+          show_title: string
+          user_id: string
+          watched_at?: string
+        }
+        Update: {
+          episode?: number
+          id?: string
+          show_id?: string
+          show_title?: string
+          user_id?: string
+          watched_at?: string
+        }
+        Relationships: []
+      }
+      watch_parties: {
+        Row: {
+          controls_locked: boolean
+          created_at: string
+          current_time_sec: number
+          episode: number
+          host_id: string
+          id: string
+          is_playing: boolean
+          show_id: string
+          show_title: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          controls_locked?: boolean
+          created_at?: string
+          current_time_sec?: number
+          episode?: number
+          host_id: string
+          id?: string
+          is_playing?: boolean
+          show_id: string
+          show_title: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          controls_locked?: boolean
+          created_at?: string
+          current_time_sec?: number
+          episode?: number
+          host_id?: string
+          id?: string
+          is_playing?: boolean
+          show_id?: string
+          show_title?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_party_member: { Args: { _party: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
