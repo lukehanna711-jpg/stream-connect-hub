@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { SHOWS } from "@/lib/shows";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
+import { seedDemoSocial } from "@/lib/demo-seed";
+import { Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/settings")({
   component: Settings,
@@ -57,6 +59,27 @@ function Settings() {
               <Toggle checked={profile.is_subscribed} onChange={(v) => update({ is_subscribed: v })} />
             </Row>
           </div>
+        </section>
+
+        <section className="bg-card border border-border rounded-lg p-6 mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <div className="text-sm font-semibold">Demo Data</div>
+          </div>
+          <div className="text-xs text-muted-foreground mb-4">
+            Seed 5 friends, sample messages, and show recommendations to instantly populate the widget for a pitch.
+          </div>
+          <button
+            onClick={async () => {
+              try {
+                await seedDemoSocial(user.id);
+                toast.success("Demo friends & messages added");
+              } catch (e: any) { toast.error(e.message || "Failed to seed"); }
+            }}
+            className="bg-primary text-primary-foreground rounded-md px-4 py-2 text-sm font-medium hover:opacity-90"
+          >
+            Seed demo social data
+          </button>
         </section>
 
         <section className="bg-card border border-border rounded-lg p-6">

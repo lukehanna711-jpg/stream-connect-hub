@@ -4,7 +4,7 @@ import { getShow, EPISODE_MINUTES } from "@/lib/shows";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useWidget } from "@/lib/widget-context";
-import { Play, Pause, SkipBack, SkipForward, Maximize2, ArrowLeft, Users } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Maximize2, ArrowLeft, Users, ChevronLeft, ChevronRight, Crown } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/watch/$showId/$ep")({
@@ -51,9 +51,6 @@ function WatchPage() {
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "watch_parties", filter: `id=eq.${activePartyId}` }, (payload: any) => {
         const p = payload.new;
         setParty(p);
-        if (p.last_actor && p.last_actor !== user?.id && p.last_action) {
-          toast(`${p.last_actor_name || "Someone"} ${p.last_action}`, { duration: 1800 });
-        }
         applyingRemoteRef.current = true;
         setIsPlaying(p.is_playing);
         setCurrentTime(p.current_time_sec);
@@ -118,7 +115,9 @@ function WatchPage() {
         </button>
         {inParty && (
           <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-primary/90 rounded-md px-3 py-1.5 text-xs font-medium">
-            <Users className="h-3 w-3" /> Watch Party Active
+            {party.host_id === user?.id ? <Crown className="h-3 w-3" /> : <Users className="h-3 w-3" />}
+            {party.host_id === user?.id ? "You're hosting" : "Watch Party"}
+            {party.controls_locked && <span className="ml-1">🔒</span>}
           </div>
         )}
 
@@ -165,6 +164,25 @@ function WatchPage() {
         <div className="text-xs text-muted-foreground uppercase tracking-widest mb-1">Now playing</div>
         <h1 className="text-2xl font-bold">{show.title} · Episode {episode}</h1>
         <p className="mt-2 text-muted-foreground max-w-2xl">{show.description}</p>
+        <div className="mt-6 flex items-center gap-2">
+          {episode > 1 && (
+            <button
+              onClick={() => nav({ to: "/watch/$showId/$ep", params: { showId: show.id, ep: String(episode - 1) } })}
+              className="flex items-center gap-1.5 bg-card border border-border hover:border-primary rounded-md px-3 py-2 text-sm"
+            >
+              <ChevronLeft className="h-4 w-4" /> Previous
+            </button>
+          )}
+          {episode < show.episodes && (
+            <button
+              onClick={() => nav({ to: "/watch/$showId/$ep", params: { showId: show.id, ep: String(episode + 1) } })}
+              className="flex items-center gap-1.5 bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+            >
+              Next Episode <ChevronRight className="h-4 w-4" />
+            </button>
+          )}
+          <div className="text-xs text-muted-foreground ml-2">Episode {episode} of {show.episodes}</div>
+        </div>
       </div>
     </main>
   );

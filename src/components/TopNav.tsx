@@ -16,9 +16,9 @@ export function TopNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
       <div className="flex h-16 items-center gap-6 px-6">
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-          <span className="text-primary">▶</span>
-          <span>StreamX</span>
+        <Link to="/" className="flex items-center gap-2 font-bold text-xl shrink-0">
+          <span className="w-7 h-7 rounded-md bg-gradient-to-br from-primary to-orange-600 flex items-center justify-center text-white text-sm shadow-lg shadow-primary/30">▶</span>
+          <span className="bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent tracking-tight">StreamX</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link to="/" className="hover:text-primary transition-colors">Browse</Link>

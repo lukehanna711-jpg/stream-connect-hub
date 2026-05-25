@@ -194,8 +194,12 @@ export function MainPanel() {
           </button>
         </div>
         {friends.length === 0 ? (
-          <div className="text-xs text-muted-foreground text-center py-6">
-            No friends yet. Click <UserPlus className="h-3 w-3 inline text-primary" /> to add one.
+          <div className="text-xs text-muted-foreground text-center py-6 px-2">
+            <div className="mb-2">No friends yet.</div>
+            <Link to="/settings" className="inline-block text-primary hover:underline text-[11px]">
+              ✨ Seed demo friends
+            </Link>
+            <div className="mt-1 text-[10px]">or click <UserPlus className="h-3 w-3 inline text-primary" /> to add one.</div>
           </div>
         ) : (
           <div className="space-y-1">
