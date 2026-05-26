@@ -108,7 +108,7 @@ function WatchPage() {
   const inParty = !!party;
 
   return (
-    <main className={`min-h-screen bg-black ${inParty ? "pr-[230px]" : ""}`}>
+    <main className="min-h-screen bg-black">
       <div className="relative">
         <button onClick={() => nav({ to: "/" })} className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/60 hover:bg-black/80 backdrop-blur rounded-md px-3 py-1.5 text-sm">
           <ArrowLeft className="h-4 w-4" /> Back

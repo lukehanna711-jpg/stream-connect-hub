@@ -8,8 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { Toaster } from "sonner";
-import { AuthProvider } from "@/lib/auth";
-import { WidgetProvider } from "@/lib/widget-context";
+import { AuthProvider, useAuth } from "@/lib/auth";
+import { WidgetProvider, useWidget } from "@/lib/widget-context";
 import { SocialWidget } from "@/components/SocialWidget";
 import { TopNav } from "@/components/TopNav";
 import { useRouterState } from "@tanstack/react-router";
@@ -81,10 +81,19 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function ChromeAndOutlet() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isLogin = pathname === "/login";
+  const { user } = useAuth();
+  const { minimised, activePartyId } = useWidget();
+  const onWatchPage = pathname.startsWith("/watch/");
+  const inParty = !!activePartyId;
+  // Widget is visible (taking space) only when: user logged in, not minimised,
+  // and not solo-watching (widget hides itself on watch page when not in party).
+  const widgetVisible = !!user && !minimised && !(onWatchPage && !inParty);
   return (
     <>
       {!isLogin && <TopNav />}
-      <Outlet />
+      <div className={widgetVisible ? "lg:pr-[230px] transition-[padding] duration-200" : "transition-[padding] duration-200"}>
+        <Outlet />
+      </div>
       <SocialWidget />
     </>
   );
