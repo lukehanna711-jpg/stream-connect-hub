@@ -45,7 +45,7 @@ function Home() {
   const newReleases = SHOWS.slice(6);
 
   return (
-    <main className="min-h-screen pr-0 lg:pr-[230px]">
+    <main className="min-h-screen">
       {/* Hero */}
       <section
         className="relative h-[65vh] min-h-[460px] flex items-end"
