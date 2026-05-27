@@ -10,6 +10,7 @@ import {
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { WidgetProvider, useWidget } from "@/lib/widget-context";
+import { WidgetBrandingProvider } from "@/lib/widget-branding-context";
 import { SocialWidget } from "@/components/SocialWidget";
 import { TopNav } from "@/components/TopNav";
 import { useRouterState } from "@tanstack/react-router";
