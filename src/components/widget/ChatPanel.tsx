@@ -54,8 +54,14 @@ export function ChatPanel({ friendId }: { friendId: string }) {
   const send = async (content: string, show_rec?: any) => {
     if (!user) return;
     if (!content && !show_rec) return;
-    await supabase.from("direct_messages").insert({ from_user: user.id, to_user: friendId, content, show_rec });
-    setText("");
+    const { error } = await supabase
+      .from("direct_messages")
+      .insert({ from_user: user.id, to_user: friendId, content, show_rec });
+    if (error) {
+      toast.error("Failed to send message. Please try again.");
+      return;
+    }
+    if (content) setText("");
   };
 
   const block = async () => {
