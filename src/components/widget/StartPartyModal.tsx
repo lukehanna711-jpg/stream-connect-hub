@@ -22,22 +22,16 @@ export function StartPartyModal({ open, onClose, onStarted }: { open: boolean; o
     setShowId(SHOWS[0].id);
     setEpisode(1);
     (async () => {
-      const { data } = await supabase
-        .from("friendships")
-        .select("friend_id, profiles!friendships_friend_id_fkey(id, username, avatar_color, is_subscribed)")
-        .eq("user_id", user.id);
-      // fallback: simpler join
-      if (!data || data.length === 0) {
-        const { data: ids } = await supabase.from("friendships").select("friend_id").eq("user_id", user.id);
-        if (ids && ids.length) {
-          const { data: profs } = await supabase.from("profiles").select("id, username, avatar_color, is_subscribed").in("id", ids.map((r) => r.friend_id));
-          setFriends(profs || []);
-        } else {
-          setFriends([]);
-        }
-      } else {
-        setFriends(data.map((d: any) => d.profiles).filter(Boolean));
+      const { data: ids } = await supabase.from("friendships").select("friend_id").eq("user_id", user.id);
+      if (!ids || ids.length === 0) {
+        setFriends([]);
+        return;
       }
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, username, avatar_color, is_subscribed")
+        .in("id", ids.map((r) => r.friend_id));
+      setFriends(profs || []);
     })();
   }, [open, user]);
 
