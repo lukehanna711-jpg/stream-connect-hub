@@ -112,6 +112,9 @@ export function StartPartyModal({ open, onClose, onStarted }: { open: boolean; o
                 ))}
               </div>
             )}
+            {selected.size === 0 && friends.length > 0 && (
+              <div className="text-[11px] text-muted-foreground mt-2">You can invite more friends once the party has started.</div>
+            )}
             <div className="flex gap-2 mt-4">
               <button onClick={() => setStep("pick")} className="flex-1 bg-accent rounded-md py-2 text-sm">Back</button>
               <button onClick={start} disabled={working} className="flex-1 bg-primary text-primary-foreground rounded-md py-2 text-sm font-medium">
