@@ -15,7 +15,7 @@ export function MainPanel() {
   const { user, profile, refresh } = useAuth();
   const { setView, onlineIds, setActivePartyId } = useWidget();
   const nav = useNavigate();
-  const [stats, setStats] = useState({ episodes: 0, series: 0, hours: 0 });
+  const [stats, setStats] = useState<{ episodes: number; series: number; hours: number } | null>(null);
   const [friends, setFriends] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
   const [partyInvites, setPartyInvites] = useState<any[]>([]);
