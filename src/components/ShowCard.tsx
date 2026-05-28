@@ -1,11 +1,39 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import type { Show } from "@/lib/shows";
+import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 
-export function ShowCard({ show }: { show: Show }) {
+export function ShowCard({ show, episode }: { show: Show; episode?: number }) {
+  const { user } = useAuth();
+  const [resolvedEp, setResolvedEp] = useState<number | null>(episode ?? null);
+
+  useEffect(() => {
+    if (episode !== undefined) { setResolvedEp(episode); return; }
+    if (!user) { setResolvedEp(1); return; }
+    let cancelled = false;
+    supabase
+      .from("watch_history")
+      .select("episode")
+      .eq("user_id", user.id)
+      .eq("show_id", show.id)
+      .order("watched_at", { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (cancelled) return;
+        const last = data?.[0]?.episode;
+        if (!last) { setResolvedEp(1); return; }
+        setResolvedEp(Math.min(show.episodes, last + 1));
+      });
+    return () => { cancelled = true; };
+  }, [user, show.id, show.episodes, episode]);
+
+  const ep = String(resolvedEp ?? 1);
+
   return (
     <Link
       to="/watch/$showId/$ep"
-      params={{ showId: show.id, ep: "1" }}
+      params={{ showId: show.id, ep }}
       className="group block"
     >
       <div className="aspect-[3/4] rounded-lg overflow-hidden relative" style={{ background: show.cover }}>

@@ -85,7 +85,7 @@ function Home() {
       {/* Continue Watching */}
       {continueShows.length > 0 && (
         <Row icon={<Clock className="h-4 w-4 text-primary" />} title="Continue Watching">
-          {continueShows.map((s) => <ShowCard key={s.id} show={s} />)}
+          {continueShows.map((s) => <ShowCard key={s.id} show={s} episode={(s as any)._ep} />)}
         </Row>
       )}
 
