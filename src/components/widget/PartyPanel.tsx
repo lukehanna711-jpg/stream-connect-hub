@@ -10,6 +10,7 @@ import { Lock, Unlock, Plus, Send, LogOut } from "lucide-react";
 export function PartyPanel({ partyId }: { partyId: string }) {
   const { user, profile } = useAuth();
   const { setView, setActivePartyId } = useWidget();
+  const navigate = useNavigate();
   const [party, setParty] = useState<any>(null);
   const [members, setMembers] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
