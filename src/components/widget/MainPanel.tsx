@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useWidget } from "@/lib/widget-context";
 import { Avatar } from "@/components/Avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Star, UserPlus, MessageCircle, Users, Check, X, Bell } from "lucide-react";
 import { AddFriendModal } from "./AddFriendModal";
 import { StartPartyModal } from "./StartPartyModal";
