@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useWidget } from "@/lib/widget-context";
 import { Avatar } from "@/components/Avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Star, UserPlus, MessageCircle, Users, Check, X, Bell } from "lucide-react";
 import { AddFriendModal } from "./AddFriendModal";
 import { StartPartyModal } from "./StartPartyModal";
@@ -14,7 +15,7 @@ export function MainPanel() {
   const { user, profile, refresh } = useAuth();
   const { setView, onlineIds, setActivePartyId } = useWidget();
   const nav = useNavigate();
-  const [stats, setStats] = useState({ episodes: 0, series: 0, hours: 0 });
+  const [stats, setStats] = useState<{ episodes: number; series: number; hours: number } | null>(null);
   const [friends, setFriends] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
   const [partyInvites, setPartyInvites] = useState<any[]>([]);
@@ -144,9 +145,19 @@ export function MainPanel() {
 
       {/* Stats */}
       <div className="p-3 border-b border-border grid grid-cols-3 gap-2">
-        <Stat label="Episodes" value={stats.episodes} />
-        <Stat label="Series" value={stats.series} />
-        <Stat label="Hours" value={`${stats.hours}h`} />
+        {stats ? (
+          <>
+            <Stat label="Episodes" value={stats.episodes} />
+            <Stat label="Series" value={stats.series} />
+            <Stat label="Hours" value={`${stats.hours}h`} />
+          </>
+        ) : (
+          <>
+            <Skeleton className="h-12 rounded-md" />
+            <Skeleton className="h-12 rounded-md" />
+            <Skeleton className="h-12 rounded-md" />
+          </>
+        )}
       </div>
 
       {/* Party invites */}
