@@ -145,9 +145,19 @@ export function MainPanel() {
 
       {/* Stats */}
       <div className="p-3 border-b border-border grid grid-cols-3 gap-2">
-        <Stat label="Episodes" value={stats.episodes} />
-        <Stat label="Series" value={stats.series} />
-        <Stat label="Hours" value={`${stats.hours}h`} />
+        {stats ? (
+          <>
+            <Stat label="Episodes" value={stats.episodes} />
+            <Stat label="Series" value={stats.series} />
+            <Stat label="Hours" value={`${stats.hours}h`} />
+          </>
+        ) : (
+          <>
+            <Skeleton className="h-12 rounded-md" />
+            <Skeleton className="h-12 rounded-md" />
+            <Skeleton className="h-12 rounded-md" />
+          </>
+        )}
       </div>
 
       {/* Party invites */}
