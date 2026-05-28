@@ -51,6 +51,16 @@ export function PartyPanel({ partyId }: { partyId: string }) {
   }, [messages]);
 
   useEffect(() => {
+    if (!party || !user) return;
+    if (party.status === "ended" && party.host_id !== user.id) {
+      toast("The watch party has ended.");
+      setActivePartyId(null);
+      setView({ kind: "main" });
+      navigate({ to: "/" });
+    }
+  }, [party, user, navigate, setActivePartyId, setView]);
+
+  useEffect(() => {
     if (!inviteOpen || !user) return;
     (async () => {
       const { data: fr } = await supabase.from("friendships").select("friend_id").eq("user_id", user.id);
