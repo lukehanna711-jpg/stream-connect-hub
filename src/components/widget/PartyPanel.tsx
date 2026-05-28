@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useWidget } from "@/lib/widget-context";
@@ -8,6 +10,7 @@ import { Lock, Unlock, Plus, Send, LogOut } from "lucide-react";
 export function PartyPanel({ partyId }: { partyId: string }) {
   const { user, profile } = useAuth();
   const { setView, setActivePartyId } = useWidget();
+  const navigate = useNavigate();
   const [party, setParty] = useState<any>(null);
   const [members, setMembers] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
@@ -46,6 +49,16 @@ export function PartyPanel({ partyId }: { partyId: string }) {
   useEffect(() => {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight });
   }, [messages]);
+
+  useEffect(() => {
+    if (!party || !user) return;
+    if (party.status === "ended" && party.host_id !== user.id) {
+      toast("The watch party has ended.");
+      setActivePartyId(null);
+      setView({ kind: "main" });
+      navigate({ to: "/" });
+    }
+  }, [party, user, navigate, setActivePartyId, setView]);
 
   useEffect(() => {
     if (!inviteOpen || !user) return;
