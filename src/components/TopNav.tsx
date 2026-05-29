@@ -23,10 +23,10 @@ export function TopNav() {
         .eq("user_id", user.id)
         .eq("show_id", showId)
         .order("watched_at", { ascending: false })
-        .limit(1)
-        .single();
-      if (data?.episode) {
-        ep = Math.min(episodes, data.episode + 1);
+        .limit(1);
+      const last = data?.[0]?.episode;
+      if (last) {
+        ep = Math.min(episodes, last + 1);
       }
     }
     nav({ to: "/watch/$showId/$ep", params: { showId, ep: String(ep) } });
