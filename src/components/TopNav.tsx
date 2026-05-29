@@ -62,7 +62,7 @@ export function TopNav() {
               {results.map((s) => (
                 <button
                   key={s.id}
-                  onMouseDown={() => { nav({ to: "/watch/$showId/$ep", params: { showId: s.id, ep: "1" } }); setQ(""); }}
+                  onMouseDown={() => goToShow(s.id, s.episodes)}
                   className="w-full text-left px-3 py-2 hover:bg-accent text-sm flex items-center gap-2"
                 >
                   <div className="w-8 h-10 rounded" style={{ background: s.cover }} />
