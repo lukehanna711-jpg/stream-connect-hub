@@ -3,6 +3,7 @@ import { Search, User as UserIcon, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useState } from "react";
 import { searchShows } from "@/lib/shows";
+import { supabase } from "@/integrations/supabase/client";
 
 export function TopNav() {
   const { profile, user, signOut } = useAuth();
