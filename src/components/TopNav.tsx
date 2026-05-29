@@ -14,6 +14,25 @@ export function TopNav() {
 
   const results = q.trim() ? searchShows(q).slice(0, 6) : [];
 
+  async function goToShow(showId: string, episodes: number) {
+    let ep = 1;
+    if (user) {
+      const { data } = await supabase
+        .from("watch_history")
+        .select("episode")
+        .eq("user_id", user.id)
+        .eq("show_id", showId)
+        .order("watched_at", { ascending: false })
+        .limit(1)
+        .single();
+      if (data?.episode) {
+        ep = Math.min(episodes, data.episode + 1);
+      }
+    }
+    nav({ to: "/watch/$showId/$ep", params: { showId, ep: String(ep) } });
+    setQ("");
+  }
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
       <div className="flex h-16 items-center gap-6 px-6">
