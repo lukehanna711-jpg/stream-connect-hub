@@ -3,6 +3,7 @@ import { Search, User as UserIcon, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useState } from "react";
 import { searchShows } from "@/lib/shows";
+import { supabase } from "@/integrations/supabase/client";
 
 export function TopNav() {
   const { profile, user, signOut } = useAuth();
@@ -12,6 +13,25 @@ export function TopNav() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const results = q.trim() ? searchShows(q).slice(0, 6) : [];
+
+  async function goToShow(showId: string, episodes: number) {
+    let ep = 1;
+    if (user) {
+      const { data } = await supabase
+        .from("watch_history")
+        .select("episode")
+        .eq("user_id", user.id)
+        .eq("show_id", showId)
+        .order("watched_at", { ascending: false })
+        .limit(1);
+      const last = data?.[0]?.episode;
+      if (last) {
+        ep = Math.min(episodes, last + 1);
+      }
+    }
+    nav({ to: "/watch/$showId/$ep", params: { showId, ep: String(ep) } });
+    setQ("");
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
@@ -42,7 +62,7 @@ export function TopNav() {
               {results.map((s) => (
                 <button
                   key={s.id}
-                  onMouseDown={() => { nav({ to: "/watch/$showId/$ep", params: { showId: s.id, ep: "1" } }); setQ(""); }}
+                  onMouseDown={() => goToShow(s.id, s.episodes)}
                   className="w-full text-left px-3 py-2 hover:bg-accent text-sm flex items-center gap-2"
                 >
                   <div className="w-8 h-10 rounded" style={{ background: s.cover }} />
